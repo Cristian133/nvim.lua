@@ -14,5 +14,6 @@ vim.opt.rtp:prepend(lazypath)
 require("keymaps")
 require("options")
 vim.cmd("source ~/.config/nvim/lua/functions.vim")
+vim.cmd("source ~/.config/nvim/lua/keymaps.vim")
 
 require("lazy").setup("plugins")

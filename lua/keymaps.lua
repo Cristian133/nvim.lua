@@ -41,18 +41,20 @@ set("", "<Leader>gj", ":call GotoJump()<CR>")
 ------------------------------------------------------------------------------
 -- toggle highlight character from line 80
 set("n", "<leader>2", ":call ToggleCol80()<CR>")
---" Close the current buffer
-set("n", "<leader>6", ":Bclose<CR>")
---" change the way numbers look
+-- Close the current buffer
+set("n", "<leader>q", ":Bclose<CR>")
+-- change the way numbers look
 set("n", "<leader>7", ":call ToggleNumber()<CR>")
---" toggle if you want to make Vim wrap long lines to fit in the window
+-- toggle if you want to make Vim wrap long lines to fit in the window
 set("n", "<leader>8", ":call ToggleWrap()<CR>")
---" buffer tex to pdf file
+-- buffer tex to pdf file
 set("n", "<leader>9", ":w!<CR>:call Build()<CR>")
+set("n", "<F9>", ":w!<CR>:call Build()<CR>")
 set("i", "<F9>", "<ESC>:w!<CR>:call Build()<CR>")
 
 ------------------------------------------------------------------------------
 -- plugins
 ------------------------------------------------------------------------------
 -- fugitive
-set("n", "<leader>d", ":Gdiffsplit<CR>", {})
+set("n", "<leader>dh", ":Ghdiffsplit<CR>", {})
+set("n", "<leader>dv", ":Gvdiffsplit<CR>", {})

@@ -13,6 +13,17 @@ nmap <F10> :let _s=@/<Bar>:%s/\s\+$//e<Bar>:let @/=_s<Bar><CR>
 imap <F10> <Esc>:let _s=@/<Bar>:%s/\s\+$//e<Bar>:let @/=_s<Bar><CR>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Highlight Yank feature builtin nvim 0.5+
+"       PR:https://github.com/neovim/neovim/pull/12279
+"       Doc: https://neovim.io/doc/user/lua.html#vim.highlight
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+augroup highlight_yank
+    autocmd!
+    au TextYankPost * silent! lua vim.highlight.on_yank({higroup="IncSearch", timeout=700})
+augroup END
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "" => Helper functions
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " terminal
@@ -111,11 +122,9 @@ function! Build()
     echo "filetype:" &filetype
     let name = expand("%:r")
     if &filetype == 'tex'
-        execute :w!<CR>
-        execute :!pdflatex %<CR>
+        execute "! pdflatex " name
     elseif &filetype == 'c'
         execute "! gcc % -o" name
-        let res =
         execute "! ./".name
     elseif &filetype == 'sh'
         execute "! chmod +x %"
@@ -131,4 +140,25 @@ function! Build()
     else
         echo "We don't know how to process this type of file"
     endif
+endfunction
+
+function! VisualSelection(direction, extra_filter) range
+    let l:saved_reg = @"
+    execute "normal! vgvy"
+
+    let l:pattern = escape(@", '\\/.*$^~[]')
+    let l:pattern = substitute(l:pattern, "\n$", "", "")
+
+    if a:direction == 'b'
+        execute "normal ?" . l:pattern . "^M"
+    elseif a:direction == 'gv'
+        call CmdLine("Ack \"" . l:pattern . "\" " )
+    elseif a:direction == 'replace'
+        call CmdLine("%s" . '/'. l:pattern . '/')
+    elseif a:direction == 'f'
+        execute "normal /" . l:pattern . "^M"
+    endif
+
+    let @/ = l:pattern
+    let @" = l:saved_reg
 endfunction

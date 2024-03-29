@@ -18,9 +18,9 @@ opt.directory = { root .. "/nvim/.swp//" }
 -- Expand tabs to spaces.
 opt.expandtab = true
 -- Number of spaces to use for each step of indent.
-opt.tabstop = 2
-opt.softtabstop = 2
-opt.shiftwidth = 2
+opt.tabstop = 4
+opt.softtabstop = 4
+opt.shiftwidth = 4
 -- Ignore case when searching
 opt.ignorecase = true
 opt.cursorline = true
