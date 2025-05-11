@@ -1,8 +1,18 @@
 local opt = vim.opt
 
+-- Disable luarocks support completely
+-- opt.rocks.enabled = false
+
+-- Line wrap
+opt.wrap = true
+
+-- Encoding
 opt.encoding="utf-8"
 opt.fileencoding = "utf-8"
 vim.scriptencoding = "utf-8"
+
+-- Set lines to the cursor - when moving vertically using j/k or Up/Down
+opt.scrolloff = 3
 
 -- Files, backups and undo
 opt.swapfile = true

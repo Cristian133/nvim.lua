@@ -1,14 +1,20 @@
+local map = vim.keymap.set
+local buf = vim.lsp.buf
 return {
-  "nvimtools/none-ls.nvim",
-  config = function()
-    local null_ls = require("null-ls")
-    null_ls.setup({
-      sources = {
-        null_ls.builtins.formatting.stylua,
-        null_ls.builtins.code_actions.gitsigns,
-        null_ls.builtins.formatting.rustfmt,
-      },
-    })
-    vim.keymap.set("n", "<leader>gf", vim.lsp.buf.format, {})
-  end,
+	"nvimtools/none-ls.nvim",
+	dependencies = {
+		"nvimtools/none-ls-extras.nvim",
+	},
+	config = function()
+		local null_ls = require("null-ls")
+		null_ls.setup({
+			sources = {
+				require("none-ls.diagnostics.cpplint"),
+                null_ls.builtins.formatting.stylua,
+                null_ls.builtins.code_actions.ts_node_action,
+                null_ls.builtins.diagnostics.buf
+            },
+		})
+		map("n", "<leader>F", buf.format, { desc = "Buffer format" })
+	end,
 }

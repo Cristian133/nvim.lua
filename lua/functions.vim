@@ -9,8 +9,8 @@ if has('autocmd')
 endif
 
 " Strip trailing whitespace
-nmap <F10> :let _s=@/<Bar>:%s/\s\+$//e<Bar>:let @/=_s<Bar><CR>
-imap <F10> <Esc>:let _s=@/<Bar>:%s/\s\+$//e<Bar>:let @/=_s<Bar><CR>
+" nmap <F10> :let _s=@/<Bar>:%s/\s\+$//e<Bar>:let @/=_s<Bar><CR>
+" imap <F10> <Esc>:let _s=@/<Bar>:%s/\s\+$//e<Bar>:let @/=_s<Bar><CR>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Highlight Yank feature builtin nvim 0.5+
@@ -117,31 +117,70 @@ function! GotoJump()
     endif
 endfunction
 
+" Chat GPT version
 function! Build()
     filetype detect
-    echo "filetype:" &filetype
-    let name = expand("%:r")
-    if &filetype == 'tex'
-        execute "! pdflatex " name
-    elseif &filetype == 'c'
-        execute "! gcc % -o" name
-        execute "! ./".name
-    elseif &filetype == 'sh'
-        execute "! chmod +x %"
-        execute "! ./%"
-    elseif &filetype == 'ruby'
-        execute "! chmod +x %"
-        execute "! ruby %"
-    elseif &filetype == 'python'
-        execute "! chmod +x %"
-        execute "! python3 %"
-     elseif &filetype == 'rust'
-        execute "! cargo run"
+    echo "Filetype detected: " . &filetype
+
+    " Variables locales
+    let l:filename = expand("%:t")
+    let l:name = fnamemodify(l:filename, ":r")
+
+    " Comandos por tipo de archivo
+    let l:commands = {
+                \ 'tex':    printf("pdflatex %s", l:name),
+                \ 'c':      [printf("gcc %% -o %s", l:name), printf("./%s", l:name)],
+                \ 'sh':     [printf("chmod +x %%"), printf("./%%")],
+                \ 'ruby':   [printf("chmod +x %%"), printf("ruby %%")],
+                \ 'python': printf("python3 %%"),
+                \ 'rust':   "cargo run",
+                \ 'make':   "make",
+                \ }
+
+    " Procesar según el tipo de archivo
+    if has_key(l:commands, &filetype)
+        let l:cmd = l:commands[&filetype]
+        if type(l:cmd) == type([]) " Si es una lista, ejecutar cada comando
+            for cmd in l:cmd
+                execute "!" . cmd
+            endfor
+        else
+            execute "!" . l:cmd
+        endif
+    elseif l:filename == "Makefile"
+        " Caso especial para Makefile
+        execute "!make"
     else
-        echo "We don't know how to process this type of file"
+        echo "Unsupported filetype: " . &filetype
     endif
 endfunction
 
+" function! Build()
+"     filetype detect
+"     echo "filetype:" &filetype
+"     let name_ext = expand("%:t")
+"     let name = fnamemodify(name_ext, ":r")
+"     if &filetype == 'tex'
+"         execute "! pdflatex " name
+"     elseif &filetype == 'c'
+"         execute "! gcc % -o" name
+"         execute "! ./"name
+"     elseif &filetype == 'sh'
+"         execute "! chmod +x %"
+"         execute "! ./%"
+"     elseif &filetype == 'ruby'
+"         execute "! chmod +x %"
+"         execute "! ruby %"
+"     elseif &filetype == 'python'
+"         execute "! chmod +x %"
+"         execute "! python3 %"
+"      elseif &filetype == 'rust'
+"         execute "! cargo run"
+"     else
+"         echo "We don't know how to process this type of file"
+"     endif
+" endfunction
+"
 function! VisualSelection(direction, extra_filter) range
     let l:saved_reg = @"
     execute "normal! vgvy"
