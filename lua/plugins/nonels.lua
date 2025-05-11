@@ -11,7 +11,6 @@ return {
 			sources = {
 				require("none-ls.diagnostics.cpplint"),
                 null_ls.builtins.formatting.stylua,
-                null_ls.builtins.code_actions.ts_node_action,
                 null_ls.builtins.diagnostics.buf
             },
 		})
