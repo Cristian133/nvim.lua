@@ -43,3 +43,6 @@ luac.out
 .swp/
 .bkp/
 .undo/
+
+# lock file
+lazy-lock.json
