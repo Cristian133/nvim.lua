@@ -11,7 +11,6 @@ return {
 			sources = {
 				require("none-ls.diagnostics.cpplint"),
                 null_ls.builtins.formatting.stylua,
-                null_ls.builtins.diagnostics.buf
             },
 		})
 		map("n", "<leader>F", buf.format, { desc = "Buffer format" })

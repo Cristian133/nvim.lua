@@ -1,13 +1,15 @@
 local opt = vim.opt
 
--- Disable luarocks support completely
--- opt.rocks.enabled = false
+-- Disable unused remote providers to suppress checkhealth warnings
+vim.g.loaded_python3_provider = 0
+vim.g.loaded_perl_provider = 0
+vim.g.loaded_ruby_provider = 0
 
 -- Line wrap
 opt.wrap = true
 
 -- Encoding
-opt.encoding="utf-8"
+opt.encoding = "utf-8"
 opt.fileencoding = "utf-8"
 vim.scriptencoding = "utf-8"
 
@@ -52,3 +54,5 @@ opt.listchars="eol:↲,trail:•,space:␣,tab:→ ,"
 opt.clipboard = "unnamedplus"
  -- Copy indent from current line when starting a new line.
 opt.autoindent = true
+-- Keep sign column always visible to avoid horizontal jitter with LSP/git signs
+opt.signcolumn = "yes"
